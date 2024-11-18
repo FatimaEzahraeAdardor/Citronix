@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1731872200128-1
+      id: 1731923681274-1
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -29,7 +29,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: farm
   - changeSet:
-      id: 1731872200128-2
+      id: 1731923681274-2
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -52,7 +52,7 @@ databaseChangeLog:
                   type: UUID
             tableName: field
   - changeSet:
-      id: 1731872200128-3
+      id: 1731923681274-3
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -75,10 +75,10 @@ databaseChangeLog:
                   type: DOUBLE
               - column:
                   name: saison
-                  type: SMALLINT
+                  type: VARCHAR(255)
             tableName: harvest
   - changeSet:
-      id: 1731872200128-4
+      id: 1731923681274-4
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -104,7 +104,7 @@ databaseChangeLog:
                   type: UUID
             tableName: harvest_details
   - changeSet:
-      id: 1731872200128-5
+      id: 1731923681274-5
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -138,7 +138,7 @@ databaseChangeLog:
                   type: UUID
             tableName: sale
   - changeSet:
-      id: 1731872200128-6
+      id: 1731923681274-6
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -159,7 +159,7 @@ databaseChangeLog:
                   type: UUID
             tableName: tree
   - changeSet:
-      id: 1731872200128-7
+      id: 1731923681274-7
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -170,7 +170,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: farm
   - changeSet:
-      id: 1731872200128-8
+      id: 1731923681274-8
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -181,7 +181,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: harvest
   - changeSet:
-      id: 1731872200128-9
+      id: 1731923681274-9
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -192,7 +192,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: tree
   - changeSet:
-      id: 1731872200128-10
+      id: 1731923681274-10
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -203,7 +203,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: harvest
   - changeSet:
-      id: 1731872200128-11
+      id: 1731923681274-11
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:

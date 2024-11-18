@@ -25,7 +25,7 @@ public class Harvest {
 
     private double total_quantity;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Saison saison;
 
     @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
