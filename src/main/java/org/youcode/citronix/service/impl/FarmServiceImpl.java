@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.repository.FarmRepository;
+import org.youcode.citronix.repository.impl.FarmRepositoryImpl;
 import org.youcode.citronix.service.FarmService;
+import org.youcode.citronix.service.dto.FarmSearchDto;
 import org.youcode.citronix.web.exception.EntityAlreadyExistsException;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
@@ -15,8 +17,10 @@ import java.util.UUID;
 @Service
 public class FarmServiceImpl implements FarmService {
     private final FarmRepository farmRepository;
-    public FarmServiceImpl(FarmRepository farmRepository) {
+    private final FarmRepositoryImpl farmRepositoryImpl;
+    public FarmServiceImpl(FarmRepository farmRepository, FarmRepositoryImpl farmRepositoryImpl) {
         this.farmRepository = farmRepository;
+        this.farmRepositoryImpl = farmRepositoryImpl;
     }
 
     @Override
@@ -62,6 +66,11 @@ public class FarmServiceImpl implements FarmService {
     public Page<Farm> findFarmsWithPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return farmRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Farm> search(FarmSearchDto searchDto) {
+        return farmRepositoryImpl.findByCriteria(searchDto);
     }
 
 

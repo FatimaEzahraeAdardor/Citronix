@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.youcode.citronix.domain.Farm;
+import org.youcode.citronix.service.dto.FarmSearchDto;
 import org.youcode.citronix.service.impl.FarmServiceImpl;
 import org.youcode.citronix.web.vm.farm.FarmResponseVm;
 import org.youcode.citronix.web.vm.farm.FarmVm;
@@ -64,4 +65,12 @@ public class FarmController {
         return new ResponseEntity<>(farmResponseVm, HttpStatus.OK);
     }
 
+    @PostMapping("search")
+    public ResponseEntity<List<FarmResponseVm>> findByCriteria(@RequestBody  FarmSearchDto farmSearchDto){
+        List<Farm> farmList = farmServiceImpl.search(farmSearchDto);
+        List<FarmResponseVm> farmResponseVm = farmList.stream()
+                .map(farmVmMapper::toResponseVM)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(farmResponseVm, HttpStatus.OK);
+    }
 }

@@ -8,23 +8,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FarmDto {
-    @NotBlank(message = "Name is required")
+public class FarmSearchDto {
     private String name;
-
-    @NotBlank(message = "location is required")
     private String location;
-
-    @Positive(message = "Area must be greater than zero")
-    @NotNull(message = "Area cannot be null")
-    private double area;
-
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDate created_at;
 
 }
