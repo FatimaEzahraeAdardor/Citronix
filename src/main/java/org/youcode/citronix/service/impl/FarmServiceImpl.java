@@ -1,5 +1,8 @@
 package org.youcode.citronix.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.repository.FarmRepository;
@@ -7,6 +10,7 @@ import org.youcode.citronix.service.FarmService;
 import org.youcode.citronix.web.exception.EntityAlreadyExistsException;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
+import java.util.List;
 import java.util.UUID;
 @Service
 public class FarmServiceImpl implements FarmService {
@@ -48,4 +52,17 @@ public class FarmServiceImpl implements FarmService {
         Farm deletedfarm = farmRepository.findById(id).orElseThrow(()->new InvalidObjectException("Farm not found"));
         farmRepository.delete(deletedfarm);
     }
+
+    @Override
+    public List<Farm> findAll() {
+        return farmRepository.findAll();
+    }
+
+    @Override
+    public Page<Farm> findFarmsWithPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return farmRepository.findAll(pageable);
+    }
+
+
 }
