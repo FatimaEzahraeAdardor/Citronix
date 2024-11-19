@@ -13,6 +13,10 @@ import org.youcode.citronix.web.vm.mapper.TreeMapperVm;
 import org.youcode.citronix.web.vm.tree.TreeResponseVm;
 import org.youcode.citronix.web.vm.tree.TreeVm;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("api/v1/trees")
 public class TreeController {
@@ -28,5 +32,26 @@ public class TreeController {
         treeServiceImpl.save(treeVm.getFieldId(), tree);
         TreeResponseVm responseVm = treeMapperVm.toTreeResponseVm(tree);
         return new ResponseEntity<>(responseVm, HttpStatus.CREATED);
+    }
+    @PutMapping("update/{id}")
+    public ResponseEntity<TreeResponseVm> update(@PathVariable UUID id, @RequestBody TreeVm treeVm) {
+        Tree tree = treeMapperVm.toTree(treeVm);
+        tree.setId(id);
+        treeServiceImpl.update(id, tree);
+        TreeResponseVm treeResponseVm = treeMapperVm.toTreeResponseVm(tree);
+        return new ResponseEntity<>(treeResponseVm, HttpStatus.OK);
+    }
+    @GetMapping("all")
+    public ResponseEntity<List<TreeResponseVm>> getAll() {
+        List<Tree> trees = treeServiceImpl.findAll();
+        List<TreeResponseVm> treeResponseVmList = trees.stream()
+                .map(treeMapperVm::toTreeResponseVm)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(treeResponseVmList, HttpStatus.OK);
+    }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id) {
+        treeServiceImpl.delete(id);
+        return new ResponseEntity<>("Tree deleted successfully",HttpStatus.OK);
     }
 }

@@ -21,7 +21,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public Tree save(UUID fieldId, Tree tree) {
         if (tree == null) {
-            throw new InvalidObjectException("Field object cannot be null.");
+            throw new InvalidObjectException("tree object cannot be null.");
         }
         Field field = fieldServiceImpl.findById(fieldId);
         if (field.getTrees().size() >= field.getArea() * 100) {
@@ -47,12 +47,29 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public Tree update(Tree tree) {
-        return null;
+    public Tree update(UUID treeId, Tree updatedTree) {
+        if (updatedTree == null) {
+            throw new InvalidObjectException("Tree object cannot be null.");
+        }
+        Tree existingTree = findById(treeId);
+        Field field = fieldServiceImpl.findById(existingTree.getField().getId());
+
+        if (field.getTrees().size() >= field.getArea() * 100) {
+            throw new InvalidObjectException("Cannot update tree. Maximum density of 100 trees per hectare exceeded.");
+        }
+        if (!isPlantingSeason(updatedTree)) {
+            throw new InvalidObjectException("Cannot update tree. Planting season is not valid.");
+        }
+        existingTree.setPlanting_date(updatedTree.getPlanting_date());
+        existingTree.setField(field);
+        return treeRepository.save(existingTree);
     }
 
+
     @Override
-    public void delete(Tree tree) {
+    public void delete(UUID id) {
+        Tree tree = findById(id);
+        treeRepository.delete(tree);
 
     }
     public boolean isPlantingSeason(Tree tree) {
