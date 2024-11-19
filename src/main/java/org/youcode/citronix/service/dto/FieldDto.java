@@ -12,7 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FieldDto {
-    private UUID id;
     @Positive(message = "Field area must be positive.")
     private double area;
     @NotNull(message = "farm id is required")
