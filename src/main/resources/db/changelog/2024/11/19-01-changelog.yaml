@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1732014541037-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: field_id
+                  type: UUID
+            tableName: harvest
+  - changeSet:
+      id: 1732014541037-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: field_id
+            baseTableName: harvest
+            constraintName: FK_HARVEST_ON_FIELD
+            referencedColumnNames: id
+            referencedTableName: field
+
