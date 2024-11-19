@@ -29,7 +29,6 @@ public class FarmRepositoryImpl {
 
         List<Predicate> predicates = new ArrayList<>();
 
-
         if (searchDto.getName() != null && !searchDto.getName().isEmpty()) {
             predicates.add(cb.like(
                     cb.lower(farmRoot.get("name")),

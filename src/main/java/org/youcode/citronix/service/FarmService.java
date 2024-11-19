@@ -15,5 +15,6 @@ public interface FarmService {
     List<Farm> findAll();
     Page<Farm> findFarmsWithPaginated(int page, int size);
     List<Farm> search(FarmSearchDto searchDto);
+    List<Farm> getFarmCheck(List<Farm> farms);
 
 }

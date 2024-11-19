@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
+import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.repository.FarmRepository;
 import org.youcode.citronix.repository.impl.FarmRepositoryImpl;
 import org.youcode.citronix.service.FarmService;
@@ -72,6 +73,19 @@ public class FarmServiceImpl implements FarmService {
     public List<Farm> search(FarmSearchDto searchDto) {
         return farmRepositoryImpl.findByCriteria(searchDto);
     }
+
+    @Override
+    public List<Farm> getFarmCheck(List<Farm> farms) {
+        return farms.stream()
+                .filter(farm -> farm.getFields().stream()
+                        .mapToDouble(Field::getArea)
+                        .sum() < 4000)
+                .toList();
+    }
+
+
+
+
 
 
 }
