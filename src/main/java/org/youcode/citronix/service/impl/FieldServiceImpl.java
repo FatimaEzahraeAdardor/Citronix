@@ -1,5 +1,8 @@
 package org.youcode.citronix.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
@@ -64,6 +67,13 @@ public class FieldServiceImpl implements FieldService {
         fieldRepository.delete(field);
 
     }
+
+    @Override
+    public Page<Field> findFieldsWithPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return fieldRepository.findAll(pageable);
+    }
+
     private void validateField(Farm farm, Field newField) {
         if (newField.getArea() < 0.1) {
             throw new InvalidObjectException("Area should be greater than 0.1");
