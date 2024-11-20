@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class TreeVm {
+    private UUID id;
 
     @NotNull(message = "planting date is required")
     private LocalDate planting_date;

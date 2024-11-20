@@ -39,14 +39,11 @@ public class TreeController {
         TreeResponseVm responseVm = treeMapperVm.toTreeResponseVm(tree);
         return new ResponseEntity<>(responseVm, HttpStatus.CREATED);
     }
-    @PutMapping("update/{id}")
-    public ResponseEntity<TreeResponseVm> update(@PathVariable UUID id, @RequestBody TreeVm treeVm) {
+    @PutMapping("update")
+    public ResponseEntity<TreeResponseVm> update(@Valid @RequestBody TreeVm treeVm) {
         Tree tree = treeMapperVm.toTree(treeVm);
-        tree.setId(id);
-        Field field = fieldServiceImpl.findById(treeVm.getFieldId());
-        tree.setField(field);
-        treeServiceImpl.update(id, tree);
-        TreeResponseVm treeResponseVm = treeMapperVm.toTreeResponseVm(tree);
+        Tree treeUpdated =  treeServiceImpl.update(tree);
+        TreeResponseVm treeResponseVm = treeMapperVm.toTreeResponseVm(treeUpdated);
         return new ResponseEntity<>(treeResponseVm, HttpStatus.OK);
     }
     @GetMapping("all")
