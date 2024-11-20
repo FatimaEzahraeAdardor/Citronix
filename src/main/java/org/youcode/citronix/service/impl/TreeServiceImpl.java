@@ -1,5 +1,8 @@
 package org.youcode.citronix.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
@@ -52,7 +55,7 @@ public class TreeServiceImpl implements TreeService {
             throw new InvalidObjectException("Tree object cannot be null.");
         }
         Tree existingTree = findById(treeId);
-        Field field = fieldServiceImpl.findById(existingTree.getField().getId());
+        Field field = fieldServiceImpl.findById(updatedTree.getField().getId());
 
         if (field.getTrees().size() >= field.getArea() * 100) {
             throw new InvalidObjectException("Cannot update tree. Maximum density of 100 trees per hectare exceeded.");
@@ -72,6 +75,13 @@ public class TreeServiceImpl implements TreeService {
         treeRepository.delete(tree);
 
     }
+
+    @Override
+    public Page<Tree> findTreesWithPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return treeRepository.findAll(pageable);
+    }
+
     public boolean isPlantingSeason(Tree tree) {
         if(tree.getPlanting_date()==null){
             return false;
