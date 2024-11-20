@@ -27,6 +27,5 @@ public class Field {
     @OneToMany(mappedBy = "field" , cascade = CascadeType.ALL)
     private List<Tree> trees;
 
-    @OneToMany(mappedBy = "field" , cascade = CascadeType.ALL)
-    private List<Harvest> harvests;
+
 }

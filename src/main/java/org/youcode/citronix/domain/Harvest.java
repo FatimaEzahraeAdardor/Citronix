@@ -34,7 +34,6 @@ public class Harvest {
     @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
     private List<Sale> sales;
 
-    @ManyToOne
-    private Field field;
+
 
 }
