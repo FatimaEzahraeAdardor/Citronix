@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HarvestVm {
+    private UUID id;
     @NotNull(message = "date is required")
     private LocalDate date;
 

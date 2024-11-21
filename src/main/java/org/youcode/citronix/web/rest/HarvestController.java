@@ -56,6 +56,13 @@ public class HarvestController {
         return new ResponseEntity<>(harvestResponseVmList, HttpStatus.OK);
 
     }
+    @PutMapping("update")
+    public ResponseEntity<HarvestResponseVm> update(@RequestBody @Valid HarvestVm harvestVm) {
+        Harvest harvest = harvestMapperVm.toharvest(harvestVm);
+        Harvest harvestSaved= harvestService.update(harvestVm.getFieldId(), harvest);
+        HarvestResponseVm harvestResponseVm = harvestMapperVm.toharvestResponseVm(harvestSaved);
+        return new ResponseEntity<>(harvestResponseVm, HttpStatus.OK);
+    }
     @GetMapping("page")
     public ResponseEntity<Page<HarvestResponseVm>> getPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         Page<Harvest> harvestPage = harvestService.findHarvestPaginated(page, size);
@@ -69,5 +76,6 @@ public class HarvestController {
         return new ResponseEntity<>("Harvest deleted successfully", HttpStatus.OK);
 
     }
+
 
 }

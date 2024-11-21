@@ -15,4 +15,15 @@ public class HarvestDetailsServiceImpl implements HarvestDetailsService {
     public HarvestDetails save(HarvestDetails harvestDetails) {
         return harvestDetailsRepository.save(harvestDetails);
     }
+
+    @Override
+    public HarvestDetails update(HarvestDetails harvestDetails) {
+        HarvestDetails exestingHarvestDetails = harvestDetailsRepository.findById(harvestDetails.getId()).get();
+        exestingHarvestDetails.setHarvest(harvestDetails.getHarvest());
+        exestingHarvestDetails.setTree(harvestDetails.getTree());
+        exestingHarvestDetails.setQuantity(harvestDetails.getQuantity());
+        return harvestDetailsRepository.save(exestingHarvestDetails);
+
+
+    }
 }

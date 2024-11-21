@@ -14,7 +14,7 @@ public interface HarvestService {
     List<Harvest> findAll();
     List<Harvest> findHarvestsBySeason(Saison season);
     Page<Harvest> findHarvestPaginated(int page, int size);
-    Harvest update(Harvest harvest);
+    Harvest update(UUID fieldId ,Harvest harvest);
     void delete(UUID id);
 
 
