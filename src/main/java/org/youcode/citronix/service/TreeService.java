@@ -12,7 +12,7 @@ public interface TreeService {
     Tree save(UUID fieldId, Tree tree);
     Tree findById(UUID id);
     List<Tree> findAll();
-    Tree update(UUID id ,Tree tree);
+    Tree update(Tree tree);
     void delete(UUID id);
     Page<Tree> findTreesWithPaginated(int page, int size);
 

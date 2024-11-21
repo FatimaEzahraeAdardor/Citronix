@@ -50,11 +50,13 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public Tree update(UUID treeId, Tree updatedTree) {
+    public Tree update(Tree updatedTree) {
         if (updatedTree == null) {
             throw new InvalidObjectException("Tree object cannot be null.");
         }
-        Tree existingTree = findById(treeId);
+
+        if (updatedTree.getId() == null) throw new InvalidObjectException("Tree id cannot be null.");
+        Tree existingTree = findById(updatedTree.getId());
         Field field = fieldServiceImpl.findById(updatedTree.getField().getId());
 
         if (field.getTrees().size() >= field.getArea() * 100) {
