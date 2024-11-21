@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.youcode.citronix.domain.Harvest;
 import org.youcode.citronix.domain.Tree;
+import org.youcode.citronix.domain.enums.Saison;
 import org.youcode.citronix.service.HarvestService;
 import org.youcode.citronix.service.impl.FieldServiceImpl;
 import org.youcode.citronix.service.impl.TreeServiceImpl;
@@ -36,6 +37,37 @@ public class HarvestController {
         Harvest harvestSaved= harvestService.save(harvestVm.getFieldId(), harvest);
         HarvestResponseVm harvestResponseVm = harvestMapperVm.toharvestResponseVm(harvestSaved);
         return new ResponseEntity<>(harvestResponseVm, HttpStatus.CREATED);
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<List<HarvestResponseVm>> getAll() {
+        List<Harvest> harvests = harvestService.findAll();
+        List<HarvestResponseVm> harvestResponseVmList = harvests.stream()
+                .map(harvest -> harvestMapperVm.toharvestResponseVm(harvest))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(harvestResponseVmList, HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<List<HarvestResponseVm>> getSeason(@RequestParam Saison season) {
+        List<Harvest> harvests = harvestService.findHarvestsBySeason(season);
+        List<HarvestResponseVm> harvestResponseVmList = harvests.stream()
+                .map(harvest -> harvestMapperVm.toharvestResponseVm(harvest))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(harvestResponseVmList, HttpStatus.OK);
+
+    }
+    @GetMapping("page")
+    public ResponseEntity<Page<HarvestResponseVm>> getPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        Page<Harvest> harvestPage = harvestService.findHarvestPaginated(page, size);
+        Page<HarvestResponseVm> harvestResponseVmPage = harvestPage.map(harvestMapperVm::toharvestResponseVm);
+        return new ResponseEntity<>(harvestResponseVmPage, HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id) {
+        harvestService.delete(id);
+        return new ResponseEntity<>("Harvest deleted successfully", HttpStatus.OK);
+
     }
 
 }

@@ -1,5 +1,8 @@
 package org.youcode.citronix.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.domain.Harvest;
@@ -38,22 +41,18 @@ public class HarvestServiceImpl implements HarvestService {
             throw new InvalidObjectException("Harvest object cannot be null.");
         }
 
-        // Check if the field already has a harvest for the given season
         if (isFieldAlreadyHarvestedInSeason(fieldId, harvest.getDate())) {
             throw new IllegalArgumentException("Each field can only have one harvest per season.");
         }
 
-        // Determine the season based on the harvest date
         Saison season = findSeason(harvest.getDate());
         harvest.setSaison(season);
 
-        // Retrieve the field by its ID
         Field field = fieldService.findById(fieldId);
         if (field == null) {
             throw new IllegalArgumentException("Field with ID " + fieldId + " not found.");
         }
 
-        // Initialize the total quantity and prepare HarvestDetails
         List<HarvestDetails> harvestDetailsList = new ArrayList<>();
         double totalQuantity = 0;
 
@@ -66,10 +65,8 @@ public class HarvestServiceImpl implements HarvestService {
             totalQuantity += tree.getProductiviteAnnuelle();
         }
 
-        // Set the total quantity for the harvest
         harvest.setTotal_quantity(totalQuantity);
 
-        // Save the harvest and harvest details
         Harvest savedHarvest = harvestRepository.save(harvest);
         for (HarvestDetails harvestDetails : harvestDetailsList) {
             harvestDetails.setHarvest(savedHarvest);
@@ -79,26 +76,52 @@ public class HarvestServiceImpl implements HarvestService {
         return savedHarvest;
     }
 
-    /**
-     * Determines if the field has already been harvested in the same season.
-     */
+    @Override
+    public Harvest findById(UUID id) {
+        return harvestRepository.findById(id).orElseThrow(()->new InvalidObjectException("Harvest with ID " + id + " not found."));
+    }
+
+    @Override
+    public List<Harvest> findAll() {
+        return harvestRepository.findAll();
+    }
+
+    @Override
+    public List<Harvest> findHarvestsBySeason(Saison season) {
+        return harvestRepository.findBySaison(season);
+    }
+
+    @Override
+    public Page<Harvest> findHarvestPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return harvestRepository.findAll(pageable);
+    }
+
+    @Override
+    public Harvest update(Harvest harvest) {
+        return null;
+    }
+
+    @Override
+    public void delete(UUID id) {
+        Harvest harvest = findById(id);
+        harvestRepository.delete(harvest);
+    }
+
+
     private boolean isFieldAlreadyHarvestedInSeason(UUID fieldId, LocalDate harvestDate) {
         Saison season = findSeason(harvestDate);
         List<Harvest> harvestsInSeason = harvestRepository.findBySaison(season);
-
         for (Harvest existingHarvest : harvestsInSeason) {
             for (HarvestDetails details : existingHarvest.getHarvestDetails()) {
                 if (details.getTree().getField().getId().equals(fieldId)) {
-                    return true; // The field has already been harvested in this season
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    /**
-     * Determines the season based on the harvest date.
-     */
     private Saison findSeason(LocalDate harvestDate) {
         int month = harvestDate.getMonthValue();
         if (month >= 3 && month <= 5) {
