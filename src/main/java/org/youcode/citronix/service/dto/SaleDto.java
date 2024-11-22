@@ -1,4 +1,4 @@
-package org.youcode.citronix.web.vm.sale;
+package org.youcode.citronix.service.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -9,12 +9,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaleVm {
-    private double area;
-    private UUID id;
+public class SaleDto {
 
     @NotNull(message = "sale date is required.")
     private LocalDate saleDate;
@@ -28,5 +25,7 @@ public class SaleVm {
 
     @NotNull(message = "Harvest id is required")
     private UUID harvestId;
+
+    private double revenue;
 
 }
