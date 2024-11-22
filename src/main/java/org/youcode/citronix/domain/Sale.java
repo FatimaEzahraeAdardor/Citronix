@@ -23,8 +23,6 @@ public class Sale {
 
     private double unit_price;
 
-    private double quantity;
-
     private String client_name;
 
     @ManyToOne
