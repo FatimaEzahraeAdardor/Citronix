@@ -10,8 +10,7 @@ import org.youcode.citronix.web.vm.sale.SaleResponseVm;
 public interface SaleVmMapper {
     @Mapping(target = "harvestId", source = "harvest.id")
     SaleDto toDto(Sale sale);
-    Sale toEntity(SaleDto saleDto);
-    @Mapping(target = "harvest_id", source = "harvest.id")
-    SaleResponseVm toResponseVM(Sale sale);
+    @Mapping(target = "harvest_id", source = "harvestId")
+    SaleResponseVm toResponseVM(SaleDto saleDto);
 
 }

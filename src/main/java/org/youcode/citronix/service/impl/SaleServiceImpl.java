@@ -14,11 +14,13 @@ import java.util.UUID;
 public class SaleServiceImpl implements SaleService {
     private final SaleRepository saleRepository;
     private final HarvestService harvestService;
+
     public SaleServiceImpl(SaleRepository saleRepository, HarvestService harvestService) {
         this.saleRepository = saleRepository;
         this.harvestService = harvestService;
 
     }
+
     @Override
     public SaleDto save(Sale sale) {
         Harvest harvest = harvestService.findById(sale.getHarvest().getId()); // Ensure the harvest is retrieved
@@ -42,11 +44,17 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public Sale findById(UUID id) {
-        return saleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Cannot find sale with id " + id));
+        return saleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find sale with id " + id));
     }
 
     @Override
     public List<Sale> findAll() {
         return saleRepository.findAll();
+    }
+
+    @Override
+    public void delete(UUID id) {
+        Sale sale = findById(id);
+         saleRepository.delete(sale);
     }
 }

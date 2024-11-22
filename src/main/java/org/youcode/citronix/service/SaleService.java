@@ -10,4 +10,5 @@ public interface SaleService {
     SaleDto save(Sale sale);
     Sale findById(UUID id);
     List<Sale> findAll();
+    void delete(UUID id);
 }
