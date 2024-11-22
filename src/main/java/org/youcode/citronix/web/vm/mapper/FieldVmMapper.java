@@ -7,8 +7,8 @@ import org.youcode.citronix.service.dto.FieldDto;
 
 @Mapper(componentModel = "spring")
 public interface FieldVmMapper {
-    Field toField(FieldDto fieldVm);
-    FieldDto toFieldVm(Field field);
+    Field toField(FieldDto fieldDto);
+    FieldDto toFieldDt(Field field);
     FieldResponseVm toResponseVM(Field field);
 
 }
