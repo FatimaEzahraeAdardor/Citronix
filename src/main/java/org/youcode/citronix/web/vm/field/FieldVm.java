@@ -1,4 +1,4 @@
-package org.youcode.citronix.service.dto;
+package org.youcode.citronix.web.vm.field;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +11,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FieldDto {
+public class FieldVm {
+    @NotNull(message = "Field area is required")
     @Positive(message = "Field area must be positive.")
     private double area;
     @NotNull(message = "farm id is required")

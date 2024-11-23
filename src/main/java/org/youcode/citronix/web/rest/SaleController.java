@@ -24,9 +24,10 @@ public class SaleController {
         this.saleVmMapper = saleVmMapper;
     }
     @PostMapping("/save")
-    public ResponseEntity<SaleDto> save(@RequestBody @Valid Sale sale){
+    public ResponseEntity<SaleResponseVm> save(@RequestBody @Valid Sale sale){
         SaleDto savedDto =saleService.save(sale);
-        return new ResponseEntity<>(savedDto , HttpStatus.CREATED);
+        SaleResponseVm saleResponseVm = saleVmMapper.toResponseVM(savedDto);
+        return new ResponseEntity<>(saleResponseVm , HttpStatus.CREATED);
     }
     @GetMapping("/details/{saleId}")
     public ResponseEntity<SaleResponseVm> getSaleById(@PathVariable UUID saleId) {
