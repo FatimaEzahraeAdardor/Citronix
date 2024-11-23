@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.repository.FieldRepository;
+import org.youcode.citronix.service.FarmService;
 import org.youcode.citronix.service.FieldService;
-import org.youcode.citronix.service.dto.FieldDto;
+import org.youcode.citronix.web.vm.field.FieldVm;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 import org.youcode.citronix.web.vm.mapper.FieldVmMapper;
 
@@ -17,26 +18,22 @@ import java.util.UUID;
 @Service
 public class FieldServiceImpl implements FieldService {
     private final FieldRepository fieldRepository;
-    private final FarmServiceImpl farmServiceImpl;
-    private final FieldVmMapper fieldVmMapper;
-    public FieldServiceImpl(FieldRepository fieldRepository, FarmServiceImpl farmServiceImpl, FieldVmMapper fieldVmMapper) {
+    private final FarmService farmService;
+
+
+    public FieldServiceImpl(FieldRepository fieldRepository, FarmService farmService) {
         this.fieldRepository = fieldRepository;
-        this.farmServiceImpl = farmServiceImpl;
-        this.fieldVmMapper = fieldVmMapper;
+        this.farmService = farmService;
     }
     @Override
-    public Field save(FieldDto fieldDto) {
-        if (fieldDto == null) {
+    public Field save(Field field) {
+        if (field == null) {
             throw new InvalidObjectException("Field object cannot be null.");
         }
-        if (fieldDto.getFarmId() == null) {
-            throw new InvalidObjectException("Farm object or its ID cannot be null.");
-        }
-        Farm farm = farmServiceImpl.findById(fieldDto.getFarmId()) ;
-        Field field = fieldVmMapper.toField(fieldDto);
+        Farm farm = farmService.findById(field.getFarm().getId()) ;
         validateField(farm, field);
-        field.setFarm(farm);
         farm.getFields().add(field);
+        field.setFarm(farm);
         return fieldRepository.save(field);
     }
 
@@ -51,10 +48,10 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public Field update(UUID id, FieldDto fieldDto) {
+    public Field update(UUID id, Field field) {
         Field existingField = findById(id);
-        Farm farm = farmServiceImpl.findById(fieldDto.getFarmId());
-        existingField.setArea(fieldDto.getArea());
+        Farm farm = farmService.findById(field.getFarm().getId()) ;
+        existingField.setArea(field.getArea());
         validateField(farm, existingField);
         existingField.setFarm(farm);
         return fieldRepository.save(existingField);
