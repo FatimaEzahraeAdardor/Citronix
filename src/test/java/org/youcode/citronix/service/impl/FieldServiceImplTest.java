@@ -9,6 +9,7 @@ import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.repository.FieldRepository;
 import org.youcode.citronix.service.FarmService;
+import org.youcode.citronix.web.exception.InvalidObjectException;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -63,4 +64,25 @@ class FieldServiceImplTest {
         assertEquals(savedFieldMock.getId(), savedField.getId());
         verify(fieldRepository).save(field);
     }
-}
+    void  FieldService_saveField_throwsInvalidObjectException_whenFieldAreaTooSmall(){
+        Field field = new Field();
+        field.setArea(0.5);
+        field.setFarm(farm);
+        when(farmService.findById(farm.getId())).thenReturn(farm);
+        assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.save(field));
+        verify(fieldRepository).save(field);
+
+
+    }
+    void FieldService_saveField_throwsInvalidObjectException_whenFieldAreaExceedsFarmArea() {
+        Field field = new Field();
+        field.setArea(50);
+        field.setFarm(farm);
+        when(farmService.findById(farm.getId())).thenReturn(farm);
+        assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.save(field));
+        verify(fieldRepository).save(field);
+    }
+
+
+
+    }
