@@ -136,11 +136,21 @@ class FieldServiceImplTest {
         updatedField.setFarm(farm);
         when(fieldRepository.findById(id)).thenReturn(Optional.of(field));
         when(farmService.findById(farm.getId())).thenReturn(farm);
-        when(fieldRepository.save(field)).thenReturn(updatedField);
+        when(fieldRepository.save(field)).thenReturn(field);
         Field savedField = fieldServiceImpl.update(id, updatedField);
         assertNotNull(savedField);
         assertEquals(20, savedField.getArea());
         verify(fieldRepository).save(field);
+    }
+    @Test
+    void FieldService_deleteField_succeed(){
+        UUID id = UUID.randomUUID();
+        Field field = new Field();
+        field.setId(id);
+        field.setArea(20);
+        field.setFarm(farm);
+        when(fieldRepository.findById(id)).thenReturn(Optional.of(field));
+        fieldServiceImpl.delete(id);
     }
 
     }
