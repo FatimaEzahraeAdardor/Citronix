@@ -145,6 +145,14 @@ class FieldServiceImplTest {
         assertEquals(field2, allFields.get(1));
     }
     @Test
+    void FieldService_findAll_returnsEmptyList() {
+        when(fieldRepository.findAll()).thenReturn(Collections.emptyList());
+        List<Field> result = fieldServiceImpl.findAll();
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void FieldService_updateField_succeed(){
         UUID id = UUID.randomUUID();
         Field field = new Field();
