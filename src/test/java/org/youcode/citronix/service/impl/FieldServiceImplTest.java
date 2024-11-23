@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.repository.FieldRepository;
@@ -13,6 +17,7 @@ import org.youcode.citronix.service.FarmService;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -151,6 +156,18 @@ class FieldServiceImplTest {
         field.setFarm(farm);
         when(fieldRepository.findById(id)).thenReturn(Optional.of(field));
         fieldServiceImpl.delete(id);
+    }
+    @Test
+    void FieldService_findFieldsWithPaginated_success(){
+        int page = 0;
+        int size = 5;
+        PageRequest pageable = PageRequest.of(page, size);
+        List<Field> fields = List.of(new Field(), new Field());
+        Page<Field> fieldPage = new PageImpl<>(fields, pageable, fields.size());
+        when(fieldRepository.findAll(pageable)).thenReturn(fieldPage);
+        Page<Field> result = fieldServiceImpl.findFieldsWithPaginated(page, size);
+        assertEquals(2, result.getContent().size());
+        verify(fieldRepository).findAll(pageable);
     }
 
     }
