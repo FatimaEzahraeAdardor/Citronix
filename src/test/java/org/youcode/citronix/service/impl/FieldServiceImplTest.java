@@ -124,4 +124,23 @@ class FieldServiceImplTest {
         verify(fieldRepository).findById(id);
     }
 
+    @Test
+    void FieldService_updateField_succeed(){
+        UUID id = UUID.randomUUID();
+        Field field = new Field();
+        field.setId(id);
+        field.setArea(10);
+        field.setFarm(farm);
+        Field updatedField = new Field();
+        updatedField.setArea(20);
+        updatedField.setFarm(farm);
+        when(fieldRepository.findById(id)).thenReturn(Optional.of(field));
+        when(farmService.findById(farm.getId())).thenReturn(farm);
+        when(fieldRepository.save(field)).thenReturn(updatedField);
+        Field savedField = fieldServiceImpl.update(id, updatedField);
+        assertNotNull(savedField);
+        assertEquals(20, savedField.getArea());
+        verify(fieldRepository).save(field);
+    }
+
     }
