@@ -116,7 +116,12 @@ class FieldServiceImplTest {
         verify(fieldRepository).findById(id);
 
     }
-
-
+    @Test
+    void FieldService_findById_throwsInvalidObjectException(){
+        UUID id = UUID.randomUUID();
+        when(fieldRepository.findById(id)).thenReturn(Optional.empty());
+        assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.findById(id));
+        verify(fieldRepository).findById(id);
+    }
 
     }
