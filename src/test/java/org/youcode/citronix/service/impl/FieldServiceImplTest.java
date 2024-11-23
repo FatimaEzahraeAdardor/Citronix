@@ -16,10 +16,7 @@ import org.youcode.citronix.repository.FieldRepository;
 import org.youcode.citronix.service.FarmService;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -128,7 +125,25 @@ class FieldServiceImplTest {
         assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.findById(id));
         verify(fieldRepository).findById(id);
     }
+    @Test
+    void FieldService_findAll_returnsListOfFields() {
+        Field field1 = new Field();
+        field1.setId(UUID.randomUUID());
+        field1.setArea(10.0);
+        field1.setFarm(farm);
 
+        Field field2 = new Field();
+        field2.setId(UUID.randomUUID());
+        field2.setArea(20.0);
+        field2.setFarm(farm);
+        List<Field> fields = Arrays.asList(field1, field2);
+        when(fieldRepository.findAll()).thenReturn(fields);
+        List<Field> allFields = fieldServiceImpl.findAll();
+        assertNotNull(allFields);
+        assertEquals(2, allFields.size());
+        assertEquals(field1, allFields.get(0));
+        assertEquals(field2, allFields.get(1));
+    }
     @Test
     void FieldService_updateField_succeed(){
         UUID id = UUID.randomUUID();
