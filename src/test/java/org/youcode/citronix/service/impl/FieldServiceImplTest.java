@@ -1,5 +1,6 @@
 package org.youcode.citronix.service.impl;
 
+import org.awaitility.reflect.exception.FieldNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -98,6 +99,21 @@ class FieldServiceImplTest {
                 fieldServiceImpl.save(field));
         verify(fieldRepository,never()).save(field);
 
+
+    }
+
+    @Test
+    void FieldService_findById_succeed(){
+        UUID id = UUID.randomUUID();
+        Field field = new Field();
+        field.setId(id);
+        field.setArea(20);
+        field.setFarm(farm);
+        when(fieldRepository.findById(id)).thenReturn(Optional.of(field));
+        Field savedField = fieldServiceImpl.findById(id);
+        assertNotNull(savedField);
+        assertEquals(id, savedField.getId());
+        verify(fieldRepository).findById(id);
 
     }
 
