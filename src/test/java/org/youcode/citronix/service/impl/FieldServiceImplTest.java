@@ -85,6 +85,21 @@ class FieldServiceImplTest {
                 fieldServiceImpl.save(field));
         verify(fieldRepository,never()).save(field);
     }
+    @Test
+    void FieldService_addField_throwsInvalidObjectException_whenFarmHasMoreThan10Fields(){
+        Field field = new Field();
+        field.setArea(30);
+        field.setFarm(farm);
+        for (int i = 0; i < 11; i++) {
+            farm.getFields().add(new Field());
+        }
+        when(farmService.findById(farm.getId())).thenReturn(farm);
+        assertThrows(InvalidObjectException.class, () ->
+                fieldServiceImpl.save(field));
+        verify(fieldRepository,never()).save(field);
+
+
+    }
 
 
 
