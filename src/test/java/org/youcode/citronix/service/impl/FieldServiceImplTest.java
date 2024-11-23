@@ -16,8 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class FieldServiceImplTest {
 
@@ -64,23 +63,27 @@ class FieldServiceImplTest {
         assertEquals(savedFieldMock.getId(), savedField.getId());
         verify(fieldRepository).save(field);
     }
+    @Test
     void  FieldService_saveField_throwsInvalidObjectException_whenFieldAreaTooSmall(){
         Field field = new Field();
-        field.setArea(0.5);
+        field.setArea(0.05);
         field.setFarm(farm);
         when(farmService.findById(farm.getId())).thenReturn(farm);
-        assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.save(field));
-        verify(fieldRepository).save(field);
+        assertThrows(InvalidObjectException.class, () ->
+                fieldServiceImpl.save(field));
+        verify(fieldRepository,never()).save(field);
 
 
     }
+    @Test
     void FieldService_saveField_throwsInvalidObjectException_whenFieldAreaExceedsFarmArea() {
         Field field = new Field();
-        field.setArea(50);
+        field.setArea(80);
         field.setFarm(farm);
         when(farmService.findById(farm.getId())).thenReturn(farm);
-        assertThrows(InvalidObjectException.class, () -> fieldServiceImpl.save(field));
-        verify(fieldRepository).save(field);
+        assertThrows(InvalidObjectException.class, () ->
+                fieldServiceImpl.save(field));
+        verify(fieldRepository,never()).save(field);
     }
 
 
