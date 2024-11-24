@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.domain.Tree;
+import org.youcode.citronix.service.FieldService;
 import org.youcode.citronix.service.TreeService;
 import org.youcode.citronix.service.impl.FieldServiceImpl;
 import org.youcode.citronix.service.impl.TreeServiceImpl;
@@ -24,44 +25,47 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/trees")
 public class TreeController {
-    private final TreeServiceImpl treeServiceImpl;
-    private final FieldServiceImpl fieldServiceImpl;
+    private final TreeService treeService;
     private final TreeMapperVm treeMapperVm;
-    public TreeController(TreeServiceImpl treeServiceImpl,  TreeMapperVm treeMapperVm, FieldServiceImpl fieldServiceImpl) {
-        this.treeServiceImpl = treeServiceImpl;
+    public TreeController(TreeService treeService,  TreeMapperVm treeMapperVm) {
+        this.treeService = treeService;
         this.treeMapperVm = treeMapperVm;
-        this.fieldServiceImpl = fieldServiceImpl;
     }
     @PostMapping("save")
     public ResponseEntity<TreeResponseVm> save(@RequestBody @Valid TreeVm treeVm){
         Tree tree = treeMapperVm.toTree(treeVm);
-        treeServiceImpl.save(treeVm.getFieldId(), tree);
+        treeService.save(tree);
         TreeResponseVm responseVm = treeMapperVm.toTreeResponseVm(tree);
         return new ResponseEntity<>(responseVm, HttpStatus.CREATED);
     }
     @PutMapping("update")
-    public ResponseEntity<TreeResponseVm> update(@Valid @RequestBody TreeVm treeVm) {
+    public ResponseEntity<TreeResponseVm> update(@RequestBody @Valid TreeVm treeVm) {
         Tree tree = treeMapperVm.toTree(treeVm);
-        Tree treeUpdated =  treeServiceImpl.update(tree);
+        Tree treeUpdated =  treeService.update(tree);
         TreeResponseVm treeResponseVm = treeMapperVm.toTreeResponseVm(treeUpdated);
         return new ResponseEntity<>(treeResponseVm, HttpStatus.OK);
     }
     @GetMapping("all")
     public ResponseEntity<List<TreeResponseVm>> getAll() {
-        List<Tree> trees = treeServiceImpl.findAll();
+        List<Tree> trees = treeService.findAll();
         List<TreeResponseVm> treeResponseVmList = trees.stream()
                 .map(treeMapperVm::toTreeResponseVm)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(treeResponseVmList, HttpStatus.OK);
     }
+    @GetMapping("/details/{treeId}")
+    public ResponseEntity<TreeResponseVm> getFieldById(@PathVariable UUID treeId) {
+        Tree tree = treeService.findById(treeId);
+        return ResponseEntity.ok(treeMapperVm.toTreeResponseVm(tree));
+    }
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id) {
-        treeServiceImpl.delete(id);
+        treeService.delete(id);
         return new ResponseEntity<>("Tree deleted successfully",HttpStatus.OK);
     }
     @GetMapping
     public ResponseEntity<Page<TreeResponseVm>> getTrees(@RequestParam (defaultValue = "0")int page, @RequestParam(defaultValue = "20") int size ) {
-        Page<Tree> treePages = treeServiceImpl.findTreesWithPaginated(page, size);
+        Page<Tree> treePages = treeService.findTreesWithPaginated(page, size);
         Page<TreeResponseVm> treeResponseVmPage = treePages.map(treeMapperVm::toTreeResponseVm);
         return new ResponseEntity<>(treeResponseVmPage, HttpStatus.OK);
     }

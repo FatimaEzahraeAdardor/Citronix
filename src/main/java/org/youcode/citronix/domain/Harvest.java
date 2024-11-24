@@ -28,10 +28,10 @@ public class Harvest {
     @Enumerated(EnumType.STRING)
     private Saison saison;
 
-    @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "harvest")
     private List<HarvestDetails> harvestDetails;
 
-    @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "harvest")
     private List<Sale> sales;
 
 

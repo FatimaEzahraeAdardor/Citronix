@@ -43,19 +43,26 @@ public class HarvestController {
     public ResponseEntity<List<HarvestResponseVm>> getAll() {
         List<Harvest> harvests = harvestService.findAll();
         List<HarvestResponseVm> harvestResponseVmList = harvests.stream()
-                .map(harvest -> harvestMapperVm.toharvestResponseVm(harvest))
+                .map(harvestMapperVm::toharvestResponseVm)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(harvestResponseVmList, HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{harvestId}")
+    public ResponseEntity<HarvestResponseVm> getFieldById(@PathVariable UUID harvestId) {
+        Harvest harvest = harvestService.findById(harvestId);
+        return ResponseEntity.ok(harvestMapperVm.toharvestResponseVm(harvest));
     }
     @GetMapping
     public ResponseEntity<List<HarvestResponseVm>> getSeason(@RequestParam Saison season) {
         List<Harvest> harvests = harvestService.findHarvestsBySeason(season);
         List<HarvestResponseVm> harvestResponseVmList = harvests.stream()
-                .map(harvest -> harvestMapperVm.toharvestResponseVm(harvest))
+                .map(harvestMapperVm::toharvestResponseVm)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(harvestResponseVmList, HttpStatus.OK);
 
     }
+
     @PutMapping("update")
     public ResponseEntity<HarvestResponseVm> update(@RequestBody @Valid HarvestVm harvestVm) {
         Harvest harvest = harvestMapperVm.toharvest(harvestVm);

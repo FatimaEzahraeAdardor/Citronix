@@ -25,7 +25,7 @@ public class Tree {
     @ManyToOne
     private Field field;
 
-    @OneToMany(mappedBy = "tree" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tree" )
     private List<HarvestDetails> harvestDetails;
 
     public int getAge(){

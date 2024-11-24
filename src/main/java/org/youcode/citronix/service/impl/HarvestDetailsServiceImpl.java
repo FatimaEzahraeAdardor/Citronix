@@ -26,4 +26,10 @@ public class HarvestDetailsServiceImpl implements HarvestDetailsService {
 
 
     }
+
+    @Override
+    public void delete(HarvestDetails harvestDetails) {
+        HarvestDetails exestingHarvestDetails = harvestDetailsRepository.findById(harvestDetails.getId()).get();
+        harvestDetailsRepository.delete(exestingHarvestDetails);
+    }
 }

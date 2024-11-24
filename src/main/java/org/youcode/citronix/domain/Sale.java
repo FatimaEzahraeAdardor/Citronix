@@ -27,4 +27,10 @@ public class Sale {
 
     @ManyToOne
     private Harvest harvest;
+
+
+    public double getrevenue(){
+       return getUnit_price() * harvest.getTotal_quantity();
+    }
+
 }

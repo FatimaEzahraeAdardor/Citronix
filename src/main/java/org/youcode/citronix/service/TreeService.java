@@ -9,7 +9,7 @@ import java.util.UUID;
 
 
 public interface TreeService {
-    Tree save(UUID fieldId, Tree tree);
+    Tree save(Tree tree);
     Tree findById(UUID id);
     List<Tree> findAll();
     Tree update(Tree tree);

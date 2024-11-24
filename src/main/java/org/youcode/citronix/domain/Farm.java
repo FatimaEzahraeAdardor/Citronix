@@ -25,7 +25,7 @@ public class Farm {
 
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "farm" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "farm" )
     private List<Field> fields;
 
 

@@ -14,4 +14,6 @@ import java.time.LocalDate;
 public class HarvestResponseVm {
     private LocalDate harvestDate;
     private Saison season;
+    private double total_quantity;
+
 }

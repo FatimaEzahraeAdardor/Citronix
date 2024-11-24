@@ -24,7 +24,7 @@ public class Field {
     @ManyToOne
     private Farm farm;
 
-    @OneToMany(mappedBy = "field" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "field" )
     private List<Tree> trees;
 
 

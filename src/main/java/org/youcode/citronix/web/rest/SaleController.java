@@ -1,14 +1,17 @@
 package org.youcode.citronix.web.rest;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.youcode.citronix.domain.Sale;
+import org.youcode.citronix.domain.Tree;
 import org.youcode.citronix.service.SaleService;
 import org.youcode.citronix.service.dto.SaleDto;
 import org.youcode.citronix.web.vm.mapper.SaleVmMapper;
 import org.youcode.citronix.web.vm.sale.SaleResponseVm;
+import org.youcode.citronix.web.vm.tree.TreeResponseVm;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,5 +55,11 @@ public class SaleController {
     public ResponseEntity<String> deleteSale(@PathVariable UUID saleId) {
         saleService.delete(saleId);
         return ResponseEntity.ok("Sale deleted successfully");
+    }
+    @GetMapping
+    public ResponseEntity<Page<SaleResponseVm>> getTrees(@RequestParam (defaultValue = "0")int page, @RequestParam(defaultValue = "20") int size ) {
+        Page<Sale> salePage = saleService.findSalesWithPaginated(page, size);
+        Page<SaleResponseVm> saleResponseVms = salePage.map(saleVmMapper::fromEntitytoResponseVM);
+        return new ResponseEntity<>(saleResponseVms, HttpStatus.OK);
     }
 }

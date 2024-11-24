@@ -6,5 +6,6 @@ import org.youcode.citronix.domain.HarvestDetails;
 public interface HarvestDetailsService {
     HarvestDetails save(HarvestDetails harvestDetails);
     HarvestDetails update(HarvestDetails harvestDetails);
+    void delete(HarvestDetails harvestDetails);
 
 }

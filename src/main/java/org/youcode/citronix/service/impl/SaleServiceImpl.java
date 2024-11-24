@@ -1,8 +1,12 @@
 package org.youcode.citronix.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Harvest;
 import org.youcode.citronix.domain.Sale;
+import org.youcode.citronix.domain.Tree;
 import org.youcode.citronix.repository.SaleRepository;
 import org.youcode.citronix.service.HarvestService;
 import org.youcode.citronix.service.SaleService;
@@ -41,7 +45,6 @@ public class SaleServiceImpl implements SaleService {
         return saleDto;
     }
 
-
     @Override
     public Sale findById(UUID id) {
         return saleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find sale with id " + id));
@@ -57,4 +60,11 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = findById(id);
          saleRepository.delete(sale);
     }
+
+    @Override
+    public Page<Sale> findSalesWithPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return saleRepository.findAll(pageable);
+    }
+
 }

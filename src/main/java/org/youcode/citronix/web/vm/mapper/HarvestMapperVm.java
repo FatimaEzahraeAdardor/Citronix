@@ -10,7 +10,7 @@ import org.youcode.citronix.web.vm.harvest.HarvestVm;
 public interface HarvestMapperVm {
     Harvest toharvest(HarvestVm harvestVm);
     HarvestVm toharvestVm(Harvest harvest);
-    @Mapping(target = "harvestDate", source = "date") // Ensure correct source
+    @Mapping(target = "harvestDate", source = "date")
     @Mapping(target = "season", source = "saison")
     HarvestResponseVm toharvestResponseVm(Harvest harvest);
 

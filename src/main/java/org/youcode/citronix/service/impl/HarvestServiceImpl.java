@@ -147,6 +147,9 @@ public class HarvestServiceImpl implements HarvestService {
     @Override
     public void delete(UUID id) {
         Harvest harvest = findById(id);
+        for (HarvestDetails details : harvest.getHarvestDetails()) {
+            harvestDetailsService.delete(details);
+        }
         harvestRepository.delete(harvest);
     }
 

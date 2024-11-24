@@ -8,6 +8,7 @@ import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
 import org.youcode.citronix.domain.Tree;
 import org.youcode.citronix.repository.TreeRepository;
+import org.youcode.citronix.service.FieldService;
 import org.youcode.citronix.service.TreeService;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
@@ -16,17 +17,17 @@ import java.util.UUID;
 @Service
 public class TreeServiceImpl implements TreeService {
     private final TreeRepository treeRepository;
-    private final FieldServiceImpl fieldServiceImpl;
-    public TreeServiceImpl(TreeRepository treeRepository, FieldServiceImpl fieldServiceImpl) {
+    private final FieldService fieldService;
+    public TreeServiceImpl(TreeRepository treeRepository, FieldService fieldService) {
         this.treeRepository = treeRepository;
-        this.fieldServiceImpl = fieldServiceImpl;
+        this.fieldService = fieldService;
     }
     @Override
-    public Tree save(UUID fieldId, Tree tree) {
+    public Tree save(Tree tree) {
         if (tree == null) {
             throw new InvalidObjectException("tree object cannot be null.");
         }
-        Field field = fieldServiceImpl.findById(fieldId);
+        Field field = fieldService.findById(tree.getField().getId());
         if (field.getTrees().size() >= field.getArea() * 100) {
             throw new InvalidObjectException("Cannot add tree. Maximum tree density of 100 trees per hectare exceeded.");
         }
@@ -51,13 +52,8 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public Tree update(Tree updatedTree) {
-        if (updatedTree == null) {
-            throw new InvalidObjectException("Tree object cannot be null.");
-        }
-
-        if (updatedTree.getId() == null) throw new InvalidObjectException("Tree id cannot be null.");
         Tree existingTree = findById(updatedTree.getId());
-        Field field = fieldServiceImpl.findById(updatedTree.getField().getId());
+        Field field = fieldService.findById(updatedTree.getField().getId());
 
         if (field.getTrees().size() >= field.getArea() * 100) {
             throw new InvalidObjectException("Cannot update tree. Maximum density of 100 trees per hectare exceeded.");
@@ -84,7 +80,7 @@ public class TreeServiceImpl implements TreeService {
         return treeRepository.findAll(pageable);
     }
 
-    public boolean isPlantingSeason(Tree tree) {
+    private boolean isPlantingSeason(Tree tree) {
         if(tree.getPlanting_date()==null){
             return false;
         }

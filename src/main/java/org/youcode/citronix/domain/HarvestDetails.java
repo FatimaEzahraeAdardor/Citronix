@@ -21,10 +21,7 @@ public class HarvestDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-
     private double quantity;
-
-
     @ManyToOne
     private Tree tree;
 

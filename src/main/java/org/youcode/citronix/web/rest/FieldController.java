@@ -40,6 +40,11 @@ public class FieldController {
         FieldResponseVm fieldResponseVm = fieldVmMapper.toResponseVM(field);
         return new ResponseEntity<>(fieldResponseVm, HttpStatus.OK);
     }
+    @GetMapping("/details/{fieldId}")
+    public ResponseEntity<FieldResponseVm> getFieldById(@PathVariable UUID fieldId) {
+        Field field = fieldService.findById(fieldId);
+        return ResponseEntity.ok(fieldVmMapper.toResponseVM(field));
+    }
     @GetMapping("all")
     public ResponseEntity<List<FieldResponseVm>> getAll() {
         List<Field> fields = fieldService.findAll();

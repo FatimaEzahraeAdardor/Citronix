@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -14,5 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TreeResponseVm {
     private UUID id;
-    private LocalDateTime planting_date;
+    private LocalDate planting_date;
+    private int age;
+    private double ProductiviteAnnuelle;
 }
