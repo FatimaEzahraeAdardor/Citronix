@@ -2,6 +2,7 @@ package org.youcode.citronix.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.youcode.citronix.domain.HarvestDetails;
 import org.youcode.citronix.domain.Tree;
 
 import java.util.List;

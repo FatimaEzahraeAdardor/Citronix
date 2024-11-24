@@ -97,53 +97,7 @@ public class HarvestServiceImpl implements HarvestService {
         return harvestRepository.findAll(pageable);
     }
 
-    @Override
-    public Harvest update(UUID fieldId, Harvest harvest) {
-        if (harvest == null) {
-            throw new InvalidObjectException("Harvest object cannot be null.");
-        }
-        Harvest existingHarvest = harvestRepository.findById(harvest.getId())
-                .orElseThrow(() -> new InvalidObjectException("Harvest with ID " + harvest.getId() + " not found."));
 
-        // Check if the field has already been harvested in the current season
-        if (isFieldAlreadyHarvestedInSeason(fieldId, harvest.getDate())) {
-            throw new IllegalArgumentException("Each field can only have one harvest per season.");
-        }
-
-        // Determine the season based on the new harvest date
-        Saison season = findSeason(harvest.getDate());
-
-        Field field = fieldService.findById(fieldId);
-        if (field == null) {
-            throw new IllegalArgumentException("Field with ID " + fieldId + " not found.");
-        }
-
-        existingHarvest.setDate(harvest.getDate());
-        existingHarvest.setSaison(season);
-
-        List<HarvestDetails> updatedHarvestDetailsList = new ArrayList<>();
-        double totalQuantity = 0;
-
-        for (Tree tree : field.getTrees()) {
-            HarvestDetails harvestDetails = new HarvestDetails();
-            harvestDetails.setHarvest(existingHarvest);
-            harvestDetails.setTree(tree);
-            harvestDetails.setQuantity(tree.getProductiviteAnnuelle());
-            updatedHarvestDetailsList.add(harvestDetails);
-            totalQuantity += tree.getProductiviteAnnuelle();
-        }
-
-        existingHarvest.setTotal_quantity(totalQuantity);
-
-        Harvest updatedHarvest = harvestRepository.save(existingHarvest);
-
-        for (HarvestDetails harvestDetails : updatedHarvestDetailsList) {
-            harvestDetails.setHarvest(updatedHarvest);
-            harvestDetailsService.update(harvestDetails);
-        }
-
-        return updatedHarvest;
-    }
     @Override
     public void delete(UUID id) {
         Harvest harvest = findById(id);

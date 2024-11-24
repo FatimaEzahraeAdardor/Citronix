@@ -6,9 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.Farm;
 import org.youcode.citronix.domain.Field;
+import org.youcode.citronix.domain.HarvestDetails;
 import org.youcode.citronix.domain.Tree;
 import org.youcode.citronix.repository.TreeRepository;
 import org.youcode.citronix.service.FieldService;
+import org.youcode.citronix.service.HarvestDetailsService;
 import org.youcode.citronix.service.TreeService;
 import org.youcode.citronix.web.exception.InvalidObjectException;
 
@@ -18,9 +20,11 @@ import java.util.UUID;
 public class TreeServiceImpl implements TreeService {
     private final TreeRepository treeRepository;
     private final FieldService fieldService;
-    public TreeServiceImpl(TreeRepository treeRepository, FieldService fieldService) {
+    private final HarvestDetailsService harvestDetailsService;
+    public TreeServiceImpl(TreeRepository treeRepository, FieldService fieldService, HarvestDetailsService harvestDetailsService) {
         this.treeRepository = treeRepository;
         this.fieldService = fieldService;
+        this.harvestDetailsService = harvestDetailsService;
     }
     @Override
     public Tree save(Tree tree) {
@@ -55,9 +59,6 @@ public class TreeServiceImpl implements TreeService {
         Tree existingTree = findById(updatedTree.getId());
         Field field = fieldService.findById(updatedTree.getField().getId());
 
-        if (field.getTrees().size() >= field.getArea() * 100) {
-            throw new InvalidObjectException("Cannot update tree. Maximum density of 100 trees per hectare exceeded.");
-        }
         if (!isPlantingSeason(updatedTree)) {
             throw new InvalidObjectException("Cannot update tree. Planting season is not valid.");
         }
@@ -70,8 +71,8 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public void delete(UUID id) {
         Tree tree = findById(id);
+        harvestDetailsService.deleteByTreeId(id);
         treeRepository.delete(tree);
-
     }
 
     @Override
@@ -79,6 +80,7 @@ public class TreeServiceImpl implements TreeService {
         Pageable pageable = PageRequest.of(page, size);
         return treeRepository.findAll(pageable);
     }
+
 
     private boolean isPlantingSeason(Tree tree) {
         if(tree.getPlanting_date()==null){

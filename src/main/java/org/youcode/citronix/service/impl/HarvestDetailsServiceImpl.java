@@ -1,9 +1,13 @@
 package org.youcode.citronix.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.youcode.citronix.domain.HarvestDetails;
 import org.youcode.citronix.repository.HarvestDetailsRepository;
 import org.youcode.citronix.service.HarvestDetailsService;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class HarvestDetailsServiceImpl implements HarvestDetailsService {
@@ -31,5 +35,15 @@ public class HarvestDetailsServiceImpl implements HarvestDetailsService {
     public void delete(HarvestDetails harvestDetails) {
         HarvestDetails exestingHarvestDetails = harvestDetailsRepository.findById(harvestDetails.getId()).get();
         harvestDetailsRepository.delete(exestingHarvestDetails);
+    }
+    @Override
+    public List<HarvestDetails> findByTreeId(UUID treeId) {
+        return harvestDetailsRepository.findByTreeId(treeId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByTreeId(UUID treeId) {
+        harvestDetailsRepository.deleteByTreeId(treeId);
     }
 }
