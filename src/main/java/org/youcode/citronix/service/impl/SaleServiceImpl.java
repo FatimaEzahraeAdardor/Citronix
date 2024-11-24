@@ -32,6 +32,7 @@ public class SaleServiceImpl implements SaleService {
         if (sale.getSaleDate().isBefore(harvest.getDate())) {
             throw new IllegalArgumentException("Sale date cannot be earlier than the harvest date.");
         }
+
         double revenue = sale.getUnit_price() * harvest.getTotal_quantity();
         SaleDto saleDto = new SaleDto(
                 sale.getSaleDate(),
