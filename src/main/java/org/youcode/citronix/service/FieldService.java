@@ -14,4 +14,6 @@ public interface FieldService {
     Field update(UUID id, Field field);
     void delete(UUID id);
     Page<Field> findFieldsWithPaginated(int page, int size);
+    void deleteByFarmId(UUID farmId);
+
 }

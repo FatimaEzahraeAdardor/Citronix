@@ -41,17 +41,18 @@ public class HarvestServiceImpl implements HarvestService {
             throw new InvalidObjectException("Harvest object cannot be null.");
         }
 
-        if (isFieldAlreadyHarvestedInSeason(fieldId, harvest.getDate())) {
-            throw new IllegalArgumentException("Each field can only have one harvest per season.");
-        }
-
-        Saison season = findSeason(harvest.getDate());
-        harvest.setSaison(season);
-
         Field field = fieldService.findById(fieldId);
         if (field == null) {
             throw new IllegalArgumentException("Field with ID " + fieldId + " not found.");
         }
+        Saison season = findSeason(harvest.getDate());
+        harvest.setSaison(season);
+
+        if (harvestRepository.existsByFieldAndSeasonAndHarvestDateYear(field,season,harvest.getDate().getYear())) {
+            throw new IllegalArgumentException("Each field can only have one harvest per season.");
+        }
+
+
 
         List<HarvestDetails> harvestDetailsList = new ArrayList<>();
         double totalQuantity = 0;
@@ -97,7 +98,6 @@ public class HarvestServiceImpl implements HarvestService {
         return harvestRepository.findAll(pageable);
     }
 
-
     @Override
     public void delete(UUID id) {
         Harvest harvest = findById(id);
@@ -106,7 +106,6 @@ public class HarvestServiceImpl implements HarvestService {
         }
         harvestRepository.delete(harvest);
     }
-
 
     private boolean isFieldAlreadyHarvestedInSeason(UUID fieldId, LocalDate harvestDate) {
         Saison season = findSeason(harvestDate);

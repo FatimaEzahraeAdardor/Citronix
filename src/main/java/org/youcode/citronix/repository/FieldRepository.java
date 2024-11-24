@@ -7,4 +7,5 @@ import org.youcode.citronix.domain.Field;
 import java.util.UUID;
 
 public interface FieldRepository extends JpaRepository<Field, UUID> {
+    void deleteByFarmId(UUID farmId);
 }

@@ -1,5 +1,6 @@
 package org.youcode.citronix.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +58,7 @@ public class FieldServiceImpl implements FieldService {
         return fieldRepository.save(existingField);
     }
 
-
+    @Transactional
     @Override
     public void delete(UUID id) {
         Field field = findById(id);
@@ -69,6 +70,11 @@ public class FieldServiceImpl implements FieldService {
     public Page<Field> findFieldsWithPaginated(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return fieldRepository.findAll(pageable);
+    }
+
+    @Override
+    public void deleteByFarmId(UUID farmId) {
+        fieldRepository.deleteByFarmId(farmId);
     }
 
     private void validateField(Farm farm, Field newField) {
