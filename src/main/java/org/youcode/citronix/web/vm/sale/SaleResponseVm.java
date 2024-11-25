@@ -18,6 +18,8 @@ public class SaleResponseVm {
 
     private LocalDate saleDate;
 
+    private double quantity;
+
     private double unit_price;
 
     private String client_name;

@@ -27,15 +27,20 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public SaleDto save(Sale sale) {
-        Harvest harvest = harvestService.findById(sale.getHarvest().getId()); // Ensure the harvest is retrieved
+        Harvest harvest = harvestService.findById(sale.getHarvest().getId());
 
         if (sale.getSaleDate().isBefore(harvest.getDate())) {
             throw new IllegalArgumentException("Sale date cannot be earlier than the harvest date.");
         }
-
-        double revenue = sale.getUnit_price() * harvest.getTotal_quantity();
+        double sumSaled = saleRepository.findTotalQuantitySoldByHarvestId(sale.getHarvest().getId()).orElse(0.0);
+        double quantityLeft = harvest.getTotal_quantity() - sumSaled;
+        if (sale.getQuantity()> quantityLeft) {
+            throw new IllegalArgumentException("Harvest available : " + quantityLeft + " kg ");
+        };
+        double revenue = sale.getUnit_price() * sale.getQuantity();
         SaleDto saleDto = new SaleDto(
                 sale.getSaleDate(),
+                sale.getQuantity(),
                 sale.getUnit_price(),
                 sale.getClient_name(),
                 sale.getHarvest().getId(),

@@ -21,6 +21,8 @@ public class Sale {
 
     private LocalDate saleDate;
 
+    private double quantity;
+
     private double unit_price;
 
     private String client_name;
@@ -30,7 +32,7 @@ public class Sale {
 
 
     public double getrevenue(){
-       return getUnit_price() * harvest.getTotal_quantity();
+       return this.getUnit_price() * this.getQuantity();
     }
 
 }

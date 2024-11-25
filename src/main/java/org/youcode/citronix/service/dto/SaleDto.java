@@ -15,7 +15,8 @@ public class SaleDto {
 
     @NotNull(message = "sale date is required.")
     private LocalDate saleDate;
-
+    @Positive(message = "Quantity must be positive.")
+    private double quantity;
 
     @Positive(message = "unit price must be positive.")
     private double unit_price;

@@ -18,4 +18,6 @@ public interface SaleVmMapper {
     @Mapping(target = "harvest_id", source = "harvest.id")
     @Mapping(target = "revenue", expression = "java(sale.getrevenue())")
     SaleResponseVm fromEntitytoResponseVM(Sale sale);
+
+
 }
