@@ -4,10 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.youcode.citronix.domain.Field;
-import org.youcode.citronix.domain.Harvest;
-import org.youcode.citronix.domain.HarvestDetails;
-import org.youcode.citronix.domain.Tree;
+import org.youcode.citronix.domain.*;
 import org.youcode.citronix.domain.enums.Saison;
 import org.youcode.citronix.repository.HarvestRepository;
 import org.youcode.citronix.service.FieldService;
@@ -52,8 +49,6 @@ public class HarvestServiceImpl implements HarvestService {
             throw new IllegalArgumentException("Each field can only have one harvest per season.");
         }
 
-
-
         List<HarvestDetails> harvestDetailsList = new ArrayList<>();
         double totalQuantity = 0;
 
@@ -73,6 +68,7 @@ public class HarvestServiceImpl implements HarvestService {
             harvestDetails.setHarvest(savedHarvest);
             harvestDetailsService.save(harvestDetails);
         }
+        savedHarvest.setHarvestDetails(harvestDetailsList);
 
         return savedHarvest;
     }
@@ -107,18 +103,18 @@ public class HarvestServiceImpl implements HarvestService {
         harvestRepository.delete(harvest);
     }
 
-    private boolean isFieldAlreadyHarvestedInSeason(UUID fieldId, LocalDate harvestDate) {
-        Saison season = findSeason(harvestDate);
-        List<Harvest> harvestsInSeason = harvestRepository.findBySaison(season);
-        for (Harvest existingHarvest : harvestsInSeason) {
-            for (HarvestDetails details : existingHarvest.getHarvestDetails()) {
-                if (details.getTree().getField().getId().equals(fieldId)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    private boolean isFieldAlreadyHarvestedInSeason(UUID fieldId, LocalDate harvestDate) {
+//        Saison season = findSeason(harvestDate);
+//        List<Harvest> harvestsInSeason = harvestRepository.findBySaison(season);
+//        for (Harvest existingHarvest : harvestsInSeason) {
+//            for (HarvestDetails details : existingHarvest.getHarvestDetails()) {
+//                if (details.getTree().getField().getId().equals(fieldId)) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     private Saison findSeason(LocalDate harvestDate) {
         int month = harvestDate.getMonthValue();
@@ -132,4 +128,6 @@ public class HarvestServiceImpl implements HarvestService {
             return Saison.WINTER;
         }
     }
+
+
 }

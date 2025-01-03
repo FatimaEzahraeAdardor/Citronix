@@ -9,6 +9,7 @@ import org.youcode.citronix.web.vm.harvest.HarvestVm;
 @Mapper(componentModel = "spring" )
 public interface HarvestMapperVm {
     Harvest toharvest(HarvestVm harvestVm);
+
     HarvestVm toharvestVm(Harvest harvest);
     @Mapping(target = "harvestDate", source = "date")
     @Mapping(target = "season", source = "saison")
